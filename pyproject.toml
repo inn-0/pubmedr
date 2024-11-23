@@ -1,0 +1,11 @@
+[project]
+name = "pubmedr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "htmx>=0.0.0",
+    "textual",
+    "textual-dev>=1.7.0",
+]
