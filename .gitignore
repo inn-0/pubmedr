@@ -1,26 +1,40 @@
-/data
-/tests/textual
-*.env
-*.venv
-
-
-
-# Unit test / coverage reports
-*__pycache__/
-*.ruff_cache
-*.mypy_cache/
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ruff_cache/
+.mypy_cache/
 .pytest_cache/
-cover/
+.coverage
+htmlcov/
+*.egg-info/
+.cache/
+dist/
+build/
+*.egg
+.eggs/
+develop-eggs/
 
+# Virtual Environments
+.env
+.venv
+env/
+venv/
 
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+/data/
+/docs_textual/
+*.gsheet
+dl_pdf/
+sample_pdf_folder/
+sample_pdf_folder_bkp/
+
+# OS specific
+.DS_Store
+Thumbs.db

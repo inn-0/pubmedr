@@ -5,7 +5,55 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "htmx>=0.0.0",
-    "textual",
+    "metapub>=0.5.12",
+    "pydantic>=2.0.0",
+    "pytest>=8.3.3",
+    "pytest-cov",
+    "pytest-asyncio>=0.24.0",
     "textual-dev>=1.7.0",
+    "textual>=0.87.1",
+    "pandas>=2.2.3",
+    "google-api-python-client>=2.154.0",
+    "google-auth>=2.36.0",
+    "gspread>=6.1.4",
+    "gspread-dataframe>=4.0.0",
+    "gspread-formatting>=1.2.0",
+    "requests>=2.32.3",
+    "urllib3>=2.2.3",
+]
+#    "htmx>=0.0.0",  # this was blocking pydantic>=2.0.0
+
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+lint.ignore = ["I001"]  # Disables import sorting
+
+[tool.ruff.format]
+exclude = ["*.pyi"]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.pytest]
+log_cli = true
+log_level = "INFO"
+
+[tool.pytest.ini_options]
+addopts = "--cov=. --no-cov-on-fail --cov-fail-under=90.0"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = [
+    "tests/test_*.py",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "tests/*",
+    "docs/*",
 ]
