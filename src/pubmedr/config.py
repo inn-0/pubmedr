@@ -19,9 +19,11 @@ def read_api_keys():
 
 api_keys = read_api_keys()
 os.environ["NCBI_API_KEY"] = api_keys["API_KEY_NCBI"]  # needs to be set globally like this
+os.environ["LOGFIRE_TOKEN"] = api_keys["API_KEY_LOGFIRE"]
 
 API_KEY_OPENAI = api_keys["API_KEY_OPENAI"]
 GOOGLE_CLOUD_CREDENTIALS = api_keys["GOOGLE_CLOUD_CREDENTIALS"]
+
 
 logger = custom_logger(__name__)
 logger.debug("Config initialized with API keys")

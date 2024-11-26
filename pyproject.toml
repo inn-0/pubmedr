@@ -20,6 +20,9 @@ dependencies = [
     "gspread-formatting>=1.2.0",
     "requests>=2.32.3",
     "urllib3>=2.2.3",
+    "logfire>=2.4.1",
+    "instructor>=1.6.4",
+    "openai>=1.55.1",
 ]
 #    "htmx>=0.0.0",  # this was blocking pydantic>=2.0.0
 
