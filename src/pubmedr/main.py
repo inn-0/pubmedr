@@ -15,7 +15,7 @@ import pubmedr.data_store as data_store
 from pubmedr.data_models import S1datamodelSetup
 
 
-class PubMedApp(App):
+class PubMedR(App):
     CSS_PATH = None
 
     BINDINGS = [
@@ -56,7 +56,7 @@ class PubMedApp(App):
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical():
-            with TabbedContent(id="main_tabs"):
+            with TabbedContent(id="main_tabs", initial="s1_setup"):
                 with TabPane("[1] Setup", id="s1_setup"):
                     with Vertical():
                         yield S1screenSetup()
@@ -84,5 +84,5 @@ class PubMedApp(App):
 
 
 if __name__ == "__main__":
-    app = PubMedApp()
+    app = PubMedR()
     app.run()

@@ -10,10 +10,11 @@ import pubmedr.data_store as data_store
 from pubmedr.data_models import S1datamodelSetup
 from pubmedr.utils import save_cache
 from pubmedr.gdrive import write_all_data
-from typing import cast, TYPE_CHECKING
+from typing import cast
+# from typing import cast, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from pubmedr.main import PubMedApp
+# if TYPE_CHECKING:
+#     from pubmedr.main import PubMedR
 
 
 class S1screenSetup(Widget):
@@ -93,3 +94,6 @@ class S1screenSetup(Widget):
                     self.app.log.error("No result from Google Sheet save operation")
             elif event.state.value == "ERROR":
                 self.app.log.error(f"Error saving to Google Sheet: {event.worker.error}")
+
+    def refresh_from_data_store(self) -> None:
+        data_store.refresh_widget_from_model(self, data_store.s1_setup_data)

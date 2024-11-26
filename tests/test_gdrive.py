@@ -8,7 +8,7 @@
 import pytest
 import pubmedr.data_store as data_store
 from pubmedr.data_models import S1datamodelSetup
-from pubmedr.gdrive import read_last_entry, write_all_data
+from pubmedr.gdrive import read_last_entry, write_all_data, read_all_entries
 
 SHEET_ID = "1iC_D0ggTRiHhr8EOl7Mi2HRYs7efzFZSRw6GqPUSC8s"
 SHEET_NAME = "test_s1_setup"
@@ -40,9 +40,21 @@ def test_write_read_last_entry(test_setup_data):
     result_data = result.copy()
     result_data.pop("timestamp_uid", None)
 
-    assert result_data == test_setup_data.dict(), "Read data doesn't match written data"
+    assert result_data == test_setup_data.model_dump(), "Read data doesn't match written data"
 
     assert "timestamp_uid" in result, "Timestamp UID not found in result"
+
+
+def test_read_all_entries():
+    """Test reading all entries and their content from Google Sheet."""
+    entries = read_all_entries(sheet_id=SHEET_ID, sheet_name=SHEET_NAME)
+    assert isinstance(entries, list), "Entries should be a list"
+
+    if entries:
+        assert isinstance(entries[0], dict), "Each entry should be a dict"
+        required_fields = ["timestamp_uid", "s1_researcher_background", "s1_researcher_goal"]
+        for field in required_fields:
+            assert field in entries[0], f"Entry should contain '{field}'"
 
 
 if __name__ == "__main__":

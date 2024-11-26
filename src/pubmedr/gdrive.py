@@ -42,15 +42,15 @@ def write_all_data(sheet_id: str, sheet_name: str = "data") -> tuple[bool, str |
         # Combine all data models into a single dictionary
         combined_data = {}
         if data_store.s1_setup_data:
-            combined_data.update(data_store.s1_setup_data.dict())
+            combined_data.update(data_store.s1_setup_data.model_dump())
         if data_store.s2_settings_data:
-            combined_data.update(data_store.s2_settings_data.dict())
+            combined_data.update(data_store.s2_settings_data.model_dump())
         if data_store.s3_queries_data:
-            combined_data.update(data_store.s3_queries_data.dict())
+            combined_data.update(data_store.s3_queries_data.model_dump())
         if data_store.s4_results_data:
-            combined_data.update(data_store.s4_results_data.dict())
+            combined_data.update(data_store.s4_results_data.model_dump())
         if data_store.s5_saved_data:
-            combined_data.update(data_store.s5_saved_data.dict())
+            combined_data.update(data_store.s5_saved_data.model_dump())
 
         # Add timestamp UID
         timestamp_uid = datetime.now().isoformat()
@@ -89,3 +89,19 @@ def read_last_entry(sheet_id: str, sheet_name: str = "data") -> dict | None:
     except Exception as error:
         logger.error(f"Error reading data: {error}")
         return None
+
+
+def read_all_entries(sheet_id: str, sheet_name: str = "data") -> list[dict]:
+    """Read all entries from the specified Google Sheet and return as a list of dictionaries."""
+    try:
+        gc = gspread_init(config.GOOGLE_CLOUD_CREDENTIALS)
+        worksheet = gc.open_by_key(sheet_id).worksheet(sheet_name)
+        df = get_as_dataframe(worksheet).dropna(how="all")
+        if not df.empty:
+            records = df.fillna("").to_dict(orient="records")
+            return records
+        else:
+            return []
+    except Exception as error:
+        logger.error(f"Error reading all data: {error}")
+        return []

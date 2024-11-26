@@ -4,7 +4,7 @@ from textual.containers import Vertical
 from pubmedr.textual_components.s1_setup import S1screenSetup
 
 
-class PubMedApp(App):
+class PubMedR(App):
     """Demo app showing proper nesting of screens in tabs"""
 
     CSS = """
@@ -48,5 +48,5 @@ class PubMedApp(App):
 
 
 if __name__ == "__main__":
-    app = PubMedApp()
+    app = PubMedR()
     app.run()
