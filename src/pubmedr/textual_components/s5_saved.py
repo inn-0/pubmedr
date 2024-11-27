@@ -1,11 +1,16 @@
 # pubmedr/textual_components/s5_saved.py
 
-from textual.widget import Widget
 from textual.app import ComposeResult
-from textual.widgets import DataTable, Button
 from textual.containers import Vertical
+from textual.widget import Widget
+from textual.widgets import Button, DataTable
+
 from pubmedr.gdrive import read_all_entries
-from pubmedr.textual_components.textual_utils import open_url_in_browser, recreate_settings
+from pubmedr.textual_components.textual_utils import (
+    load_settings,
+    notify_operation_status,
+    open_url_in_browser,
+)
 
 
 class S5screenSaved(Widget):
@@ -18,9 +23,9 @@ class S5screenSaved(Widget):
     def compose(self) -> ComposeResult:
         with Vertical():
             yield DataTable(id="saved_data_table")
-            yield Button("Recreate These Settings", id="recreate_settings")
+            yield Button("LOAD Settings from Selected", id="load_settings")
             yield Button("Refresh Data", id="refresh_data")
-            yield Button("Open Database", id="open_database")
+            yield Button("Open Google Sheet", id="open_database")
 
     async def on_mount(self) -> None:
         """Do not load data on mount to prevent focus issues."""
@@ -69,7 +74,7 @@ class S5screenSaved(Widget):
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle button presses without causing focus issues."""
-        if event.button.id == "recreate_settings":
+        if event.button.id == "load_settings":
             # Prevent multiple activations
             if hasattr(self, "processing_recreate") and self.processing_recreate:
                 return
@@ -86,8 +91,9 @@ class S5screenSaved(Widget):
             entry = self.entries[row_index]
             # Remove 'timestamp_uid' from entry if present
             entry.pop("timestamp_uid", None)
-            recreate_settings(self.app, entry)
+            load_settings(self.app, entry)
             self.processing_recreate = False
+            notify_operation_status(self.app, True, "Data load", "Settings Loaded ✨")
         elif event.button.id == "refresh_data":
             # Prevent multiple activations
             if hasattr(self, "processing_refresh") and self.processing_refresh:

@@ -1,5 +1,6 @@
-from pubmedr import config
 import logfire
+
+from pubmedr import config
 
 print(type(config))
 logfire.configure()

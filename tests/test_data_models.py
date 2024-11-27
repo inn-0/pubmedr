@@ -2,14 +2,15 @@
 
 import pandas as pd
 import pytest
-from test_gdrive import SHEET_ID
-from pubmedr.data_models import S1datamodelSetup
 from pydantic import ValidationError
+from test_gdrive import SHEET_ID
+
 from pubmedr.data_models import (
-    S2datamodelSettingsSimple,
-    S2datamodelSettingsSimpleAdvanced,
-    S2datamodelSettings,
     EnumSpecies,
+    S1datamodelSetup,
+    S2datamodelSettings,
+    S2datamodelSettingsAdvanced,
+    S2datamodelSettingsSimple,
 )
 
 
@@ -116,7 +117,7 @@ class TestS2SettingsAdvanced:
             ],
         )
         def test_valid_init(self, data, target, expected):
-            settings = S2datamodelSettingsSimpleAdvanced(**data)
+            settings = S2datamodelSettingsAdvanced(**data)
             assert getattr(settings, target) == expected
 
         @pytest.mark.parametrize(
@@ -134,7 +135,7 @@ class TestS2SettingsAdvanced:
         )
         def test_invalid_init(self, data, error_msg):
             with pytest.raises(ValidationError) as exc_info:
-                S2datamodelSettingsSimpleAdvanced(**data)
+                S2datamodelSettingsAdvanced(**data)
             assert error_msg in str(exc_info.value)
 
 
@@ -159,7 +160,7 @@ class TestS2SettingsCombined:
 
         # Test inheritance
         assert isinstance(settings, S2datamodelSettingsSimple)
-        assert isinstance(settings, S2datamodelSettingsSimpleAdvanced)
+        assert isinstance(settings, S2datamodelSettingsAdvanced)
 
         # Test field validation from both parent classes
         assert settings.keywords == "CRISPR cancer"

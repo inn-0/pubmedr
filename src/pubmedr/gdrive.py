@@ -1,13 +1,14 @@
 # gdrive.py
 
+from datetime import datetime
+
+import pandas as pd
 from gspread.auth import service_account_from_dict as gspread_init
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 from gspread_formatting import CellFormat, format_cell_range, set_column_width
-from pubmedr import config
-import pubmedr.data_store as data_store
-import pandas as pd
-from datetime import datetime
 
+import pubmedr.data_store as data_store
+from pubmedr import config
 
 logger = config.custom_logger(__name__)
 

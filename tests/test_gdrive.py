@@ -6,9 +6,10 @@
 
 
 import pytest
+
 import pubmedr.data_store as data_store
 from pubmedr.data_models import S1datamodelSetup
-from pubmedr.gdrive import read_last_entry, write_all_data, read_all_entries
+from pubmedr.gdrive import read_all_entries, read_last_entry, write_all_data
 
 SHEET_ID = "1iC_D0ggTRiHhr8EOl7Mi2HRYs7efzFZSRw6GqPUSC8s"
 SHEET_NAME = "test_s1_setup"

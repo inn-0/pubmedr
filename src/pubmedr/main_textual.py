@@ -1,8 +1,14 @@
 # main.py
 
+from pathlib import Path
+
 from textual.app import App, ComposeResult
-from textual.widgets import Header, TabbedContent, TabPane
 from textual.containers import Vertical
+from textual.widgets import Header, MarkdownViewer, TabbedContent, TabPane
+
+import pubmedr.data_store as data_store
+from pubmedr.data_models import S1datamodelSetup
+from pubmedr.gdrive import read_last_entry
 from pubmedr.textual_components.s1_setup import S1screenSetup
 from pubmedr.textual_components.s2_settings import S2screenSettings
 from pubmedr.textual_components.s3_queries import S3screenQueries
@@ -10,15 +16,13 @@ from pubmedr.textual_components.s4_results import S4screenResults
 from pubmedr.textual_components.s5_saved import S5screenSaved
 from pubmedr.textual_components.textual_utils import CustomFooter
 from pubmedr.utils import load_cache
-from pubmedr.gdrive import read_last_entry
-import pubmedr.data_store as data_store
-from pubmedr.data_models import S1datamodelSetup
 
 
 class PubMedR(App):
-    CSS_PATH = None
+    CSS = """"""
 
     BINDINGS = [
+        ("0", "show_tab('s0_readme')", "Readme"),
         ("1", "show_tab('s1_setup')", "Setup"),
         ("2", "show_tab('s2_settings')", "Settings"),
         ("3", "show_tab('s3_queries')", "Queries"),
@@ -51,12 +55,18 @@ class PubMedR(App):
             self.log.info("Loaded data from local cache")
 
     def on_mount(self) -> None:
-        self.theme = "dracula"
+        self.theme = "monokai"
 
     def compose(self) -> ComposeResult:
         yield Header()
         with Vertical():
-            with TabbedContent(id="main_tabs", initial="s1_setup"):
+            with TabbedContent(id="main_tabs", initial="s0_readme"):
+                with TabPane("[0] Readme", id="s0_readme"):
+                    with Vertical():
+                        yield MarkdownViewer(
+                            Path("README.md").read_text(),
+                            show_table_of_contents=True,
+                        )
                 with TabPane("[1] Setup", id="s1_setup"):
                     with Vertical():
                         yield S1screenSetup()

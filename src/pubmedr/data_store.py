@@ -1,6 +1,7 @@
 # data_store.py
 
 from textual.widgets import Input
+
 from pubmedr.data_models import (
     S1datamodelSetup,
     S2datamodelSettings,

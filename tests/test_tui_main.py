@@ -1,6 +1,7 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, Label, Input, Static, TabbedContent, TabPane
 from textual.containers import Vertical
+from textual.widgets import Footer, Header, Input, Label, Static, TabbedContent, TabPane
+
 from pubmedr.textual_components.s1_setup import S1screenSetup
 
 

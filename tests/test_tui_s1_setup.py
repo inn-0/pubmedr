@@ -1,8 +1,10 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer
 from textual.containers import Container
+from textual.widgets import Footer, Header
+
 from pubmedr.textual_components.s1_setup import S1screenSetup
 from pubmedr.utils import load_cache
+
 
 class TestS1App(App):
     """Test app for S1screenSetup with proper cache initialization"""

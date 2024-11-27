@@ -1,19 +1,21 @@
 import json
 import logging
+
 import pytest
+
+from pubmedr.ai_methods import run_llm_job
 from pubmedr.data_models import (
-    S2datamodelSettingsSimple,
-    S2datamodelSettings,
-    S2AIJobInputSimple,
     S2AIJobInputAdvanced,
-    S3AIJobInputSimple,
+    S2AIJobInputSimple,
+    S2AIJobOutputSimple,
+    S2datamodelSettings,
+    S2datamodelSettingsSimple,
     S3AIJobInputAdvanced,
+    S3AIJobInputSimple,
     S3AIJobOutput,
     S5AIJobInput,
-    S2AIJobOutputSimple,
     S5AIJobOutput,
 )
-from pubmedr.ai_methods import run_llm_job
 
 logger = logging.getLogger(__name__)
 

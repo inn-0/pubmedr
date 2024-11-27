@@ -1,9 +1,14 @@
 # textual_utils.py
 
 import webbrowser
+from datetime import datetime
+from typing import TYPE_CHECKING, cast
+
 from pydantic import ValidationError
+from rich.text import Text
+from textual.widgets import Button, Footer
+
 import pubmedr.data_store as data_store
-from pubmedr.utils import save_cache
 from pubmedr.data_models import (
     S1datamodelSetup,
     S2datamodelSettings,
@@ -11,10 +16,7 @@ from pubmedr.data_models import (
     S4datamodelResults,
     S5datamodelSaved,
 )
-from textual.widgets import Button, Footer
-from rich.text import Text
-from datetime import datetime
-from typing import cast, TYPE_CHECKING
+from pubmedr.utils import save_cache
 
 if TYPE_CHECKING:
     from pubmedr.main import PubMedR
@@ -86,7 +88,7 @@ def refresh_all_screens(app):
     #     s5_screen.refresh_from_data_store()
 
 
-def recreate_settings(app, entry: dict):
+def load_settings(app, entry: dict):
     """Recreate settings by updating data_store and UI components."""
 
     data_model_classes = {
@@ -116,5 +118,63 @@ def recreate_settings(app, entry: dict):
 
     refresh_all_screens(app)
 
-    app.log("Settings have been recreated from the selected entry.")
+    app.log("Settings have been loaded from the selected entry.")
     app.bell()
+
+
+def notify_operation_status(
+    app,
+    success: bool,
+    operation_name: str,
+    success_msg: str | None = None,
+    error_msg: str | None = None,
+    timeout: int = 5,
+) -> None:
+    """Show a toast notification for operation status.
+
+    Args:
+        app: The Textual app instance
+        success: Whether the operation succeeded
+        operation_name: Name of the operation (for default messages)
+        success_msg: Optional custom success message
+        error_msg: Optional custom error message
+        timeout: Notification timeout in seconds
+    """
+    if success:
+        app.notify(
+            success_msg or f"{operation_name} completed ✨",
+            title="Success",
+            timeout=timeout,
+        )
+        app.log.info(f"{operation_name} completed")
+    else:
+        app.notify(
+            error_msg or f"Failed to complete {operation_name}",
+            title="Error",
+            severity="error",
+            timeout=timeout,
+        )
+        app.log.error(f"Failed to complete {operation_name}: {error_msg or 'unknown error'}")
+
+
+def notify_error(
+    app,
+    error_msg: str,
+    operation_name: str | None = None,
+    timeout: int = 5,
+) -> None:
+    """Show an error toast notification.
+
+    Args:
+        app: The Textual app instance
+        error_msg: The error message
+        operation_name: Optional operation name for logging
+        timeout: Notification timeout in seconds
+    """
+    app.notify(
+        error_msg,
+        title="Error",
+        severity="error",
+        timeout=timeout,
+    )
+    app.log.error(f"{operation_name + ': ' if operation_name else ''}{error_msg}")

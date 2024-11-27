@@ -1,8 +1,9 @@
 # data_models.py
 
-from pydantic import BaseModel, Field, field_validator, ValidationInfo
-import pandas as pd
 from enum import Enum
+
+import pandas as pd
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 
 class S1datamodelSetup(BaseModel):
@@ -52,6 +53,9 @@ class EnumSpecies(str, Enum):
     BOTH = "Both"
 
 
+# These were made by summarising the Query string documentation https://pubmed.ncbi.nlm.nih.gov/help/
+
+
 class S2datamodelSettingsSimple(BaseModel):
     """Simple parameters for the search."""
 
@@ -96,14 +100,14 @@ class S2datamodelSettingsSimple(BaseModel):
         return v
 
 
-class S2datamodelSettingsSimpleAdvanced(BaseModel):
+class S2datamodelSettingsAdvanced(BaseModel):
     """Data model for Advanced Search Settings."""
 
     complex_boolean: bool | None = Field(False, description="Enable complex boolean logic.")
     first_author: str | None = Field(None, description="Specify first author.")
     last_author: str | None = Field(None, description="Specify last author.")
     substance_name: str | None = Field(None, description="Search for specific chemicals or drugs.")
-    proximity_search_terms: str | None = Field(None, description="Terms for proximity search.")
+    proximity_search_enabled: bool | None = Field(False, description="Enable proximity search.")
     proximity_distance: int | None = Field(50, description="Word proximity distance for proximity search.", ge=0)
     species: EnumSpecies | None = Field(None, description="Limit to human or animal studies.")
     gender: EnumGender | None = Field(None, description="Specify male or female studies.")
@@ -126,7 +130,7 @@ class S2datamodelSettingsSimpleAdvanced(BaseModel):
     result_limit: int | None = Field(999, description="Total number of results across all queries.", ge=1)
 
 
-class S2datamodelSettings(S2datamodelSettingsSimple, S2datamodelSettingsSimpleAdvanced):
+class S2datamodelSettings(S2datamodelSettingsSimple, S2datamodelSettingsAdvanced):
     """Combined data model for all Search Settings."""
 
     pass
@@ -166,6 +170,17 @@ class S3AIJobOutput(BaseModel):
     new_queries: list[str] = Field(..., description="List of generated queries.")
 
 
+class S3datamodelQueries(BaseModel):  # TODO
+    s3_queries: list[str] | None = None
+    s3_selected_queries: list[str] | None = None
+    """
+    This data model should include fields for:
+    - List of generated queries
+    - Selected queries for execution
+    - Edited queries
+    """
+
+
 class S4datamodelResults(BaseModel):
     s4_articles: list[dict] | None = None
     s4_selected_articles: list[dict] | None = None
@@ -173,6 +188,16 @@ class S4datamodelResults(BaseModel):
     This data model should include fields for:
     - Articles retrieved from queries
     - Selected articles to save
+    """
+
+
+class S5datamodelSaved(BaseModel):  # TODO
+    s5_saved_papers: list[dict] | None = None
+    s5_notes: dict[str, str] | None = None
+    """
+    This data model should include fields for:
+    - Saved papers from Google Sheets
+    - Notes taken by the user on each paper
     """
 
 

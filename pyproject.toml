@@ -11,7 +11,7 @@ dependencies = [
     "pytest-cov",
     "pytest-asyncio>=0.24.0",
     "textual-dev>=1.7.0",
-    "textual>=0.87.1",
+    "textual[syntax]>=0.87.1",
     "pandas>=2.2.3",
     "google-api-python-client>=2.154.0",
     "google-auth>=2.36.0",
@@ -23,6 +23,7 @@ dependencies = [
     "logfire>=2.4.1",
     "instructor>=1.6.4",
     "openai>=1.55.1",
+    "streamlit>=1.40.2",
 ]
 #    "htmx>=0.0.0",  # this was blocking pydantic>=2.0.0
 

@@ -7,8 +7,11 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - [%(module)s.%(funcName)s:%(lineno)d] - %(message)s",
 )
+
+
 def custom_logger(name):
     return logging.getLogger(name)
+
 
 def read_api_keys():
     env_path = Path(__file__).parent.parent.parent.joinpath(".env")

@@ -1,17 +1,17 @@
 # ai_methods.py
 
 import logging
-from pubmedr import config
 from typing import Any
-
 
 import instructor
 import logfire
 from logfire.integrations.logging import LogfireLoggingHandler
 from openai import OpenAI
+
+from pubmedr import config
 from pubmedr.data_models import (
-    S2AIJobOutputSimple,
     S2AIJobOutputAdvanced,
+    S2AIJobOutputSimple,
     S3AIJobOutput,
     S5AIJobOutput,
 )
