@@ -7,9 +7,6 @@ requires-python = ">=3.12"
 dependencies = [
     "metapub>=0.5.12",
     "pydantic>=2.0.0",
-    "pytest>=8.3.3",
-    "pytest-cov",
-    "pytest-asyncio>=0.24.0",
     "textual-dev>=1.7.0",
     "textual[syntax]>=0.87.1",
     "pandas>=2.2.3",
@@ -25,13 +22,19 @@ dependencies = [
     "openai>=1.55.1",
     "streamlit>=1.40.2",
     "streamlit-code-editor>=0.1.21",
-    "pyinstrument>=5.0.0",
 ]
 #    "htmx>=0.0.0",  # this was blocking pydantic>=2.0.0
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-cov",
+    "pytest-asyncio>=0.24.0",
+    "pyinstrument>=5.0.0",
 
+]
 
 [tool.ruff]
-line-length = 180
+line-length = 120
 indent-width = 4
 lint.ignore = ["I001"]  # Disables import sorting
 
