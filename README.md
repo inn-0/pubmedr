@@ -7,6 +7,8 @@
 
 [PubMedR Live Demo](https://pubmedr.replit.app)
 
+![PubMedR Video](./assets/PubMedR.mp4)
+
 
 ---
 
