@@ -6,11 +6,11 @@ from pydantic import ValidationError
 from test_gdrive import SHEET_ID
 
 from pubmedr.data_models import (
-    EnumSpecies,
-    S1datamodelSetup,
-    S2datamodelSettings,
-    S2datamodelSettingsAdvanced,
-    S2datamodelSettingsSimple,
+    S1Setup,
+    S2EnumSpecies,
+    S2Settings,
+    S2SettingsAdvanced,
+    S2SettingsSimple,
 )
 
 
@@ -23,11 +23,11 @@ def dummy_setup_data():
     }
 
 
-def test_s1_datamodel(dummy_setup_data):
-    """Test S1datamodelSetup model creation, DataFrame conversion, and roundtrip."""
+def test_s1_(dummy_setup_data):
+    """Test S1Setup model creation, DataFrame conversion, and roundtrip."""
 
     # Test model creation from dictionary
-    setup = S1datamodelSetup(**dummy_setup_data)
+    setup = S1Setup(**dummy_setup_data)
     assert setup.dict() == dummy_setup_data
 
     # Test conversion to DataFrame
@@ -37,11 +37,11 @@ def test_s1_datamodel(dummy_setup_data):
     assert df.iloc[0].to_dict() == dummy_setup_data
 
     # Test creation from DataFrame
-    setup_from_df = S1datamodelSetup.from_dataframe(df)
+    setup_from_df = S1Setup.from_dataframe(df)
     assert setup_from_df == setup
 
     # Test model -> DataFrame -> model roundtrip
-    setup_roundtrip = S1datamodelSetup.from_dataframe(setup.to_dataframe())
+    setup_roundtrip = S1Setup.from_dataframe(setup.to_dataframe())
     assert setup_roundtrip == setup
 
 
@@ -68,7 +68,7 @@ class TestS2SettingsSimple:
             ],
         )
         def test_valid_init(self, data, target, expected):
-            settings = S2datamodelSettingsSimple(**data)
+            settings = S2SettingsSimple(**data)
             assert getattr(settings, target) == expected
 
         @pytest.mark.parametrize(
@@ -90,7 +90,7 @@ class TestS2SettingsSimple:
         )
         def test_invalid_init(self, data, error_msg):
             with pytest.raises(ValidationError) as exc_info:
-                S2datamodelSettingsSimple(**data)
+                S2SettingsSimple(**data)
             assert error_msg in str(exc_info.value)
 
 
@@ -117,7 +117,7 @@ class TestS2SettingsAdvanced:
             ],
         )
         def test_valid_init(self, data, target, expected):
-            settings = S2datamodelSettingsAdvanced(**data)
+            settings = S2SettingsAdvanced(**data)
             assert getattr(settings, target) == expected
 
         @pytest.mark.parametrize(
@@ -135,7 +135,7 @@ class TestS2SettingsAdvanced:
         )
         def test_invalid_init(self, data, error_msg):
             with pytest.raises(ValidationError) as exc_info:
-                S2datamodelSettingsAdvanced(**data)
+                S2SettingsAdvanced(**data)
             assert error_msg in str(exc_info.value)
 
 
@@ -156,21 +156,21 @@ class TestS2SettingsCombined:
             "result_limit": 500,
         }
 
-        settings = S2datamodelSettings(**data)
+        settings = S2Settings(**data)
 
         # Test inheritance
-        assert isinstance(settings, S2datamodelSettingsSimple)
-        assert isinstance(settings, S2datamodelSettingsAdvanced)
+        assert isinstance(settings, S2SettingsSimple)
+        assert isinstance(settings, S2SettingsAdvanced)
 
         # Test field validation from both parent classes
         assert settings.keywords == "CRISPR cancer"
         assert settings.start_year == 2020
-        assert settings.species == EnumSpecies.HUMAN
+        assert settings.species == S2EnumSpecies.HUMAN
         assert settings.result_limit == 500
 
         # Test validation error propagation from both parent classes
         with pytest.raises(ValidationError) as exc_info:
-            S2datamodelSettings(
+            S2Settings(
                 date_range="custom",
                 start_year=2024,
                 end_year=2020,  # Invalid: end < start

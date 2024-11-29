@@ -1,16 +1,28 @@
 # gdrive.py
 
 from datetime import datetime
+from typing import Any
 
+import logfire
 import pandas as pd
 from gspread.auth import service_account_from_dict as gspread_init
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 from gspread_formatting import CellFormat, format_cell_range, set_column_width
 
-import pubmedr.data_store as data_store
 from pubmedr import config
 
 logger = config.custom_logger(__name__)
+
+_worksheet_cache = {}
+
+
+def get_cached_worksheet(sheet_id: str, sheet_name: str = "data"):
+    """Get or create cached worksheet connection."""
+    cache_key = f"{sheet_id}:{sheet_name}"
+    if cache_key not in _worksheet_cache:
+        gc = gspread_init(config.GOOGLE_CLOUD_CREDENTIALS)
+        _worksheet_cache[cache_key] = gc.open_by_key(sheet_id).worksheet(sheet_name)
+    return _worksheet_cache[cache_key]
 
 
 def format_worksheet(worksheet):
@@ -34,31 +46,31 @@ def format_worksheet(worksheet):
         set_column_width(worksheet, f"{col_letter}:{col_letter}", width)
 
 
-def write_all_data(sheet_id: str, sheet_name: str = "data") -> tuple[bool, str | None]:
-    try:
-        gc = gspread_init(config.GOOGLE_CLOUD_CREDENTIALS)
-        worksheet = gc.open_by_key(sheet_id).worksheet(sheet_name)
-        existing_df = get_as_dataframe(worksheet).dropna(how="all")
+def write_all_data(
+    sheet_id: str,
+    data: dict[str, Any],
+    sheet_name: str = "data",
+) -> tuple[bool, str | None]:
+    """Write data to Google Sheet, appending to existing data.
 
-        # Combine all data models into a single dictionary
-        combined_data = {}
-        if data_store.s1_setup_data:
-            combined_data.update(data_store.s1_setup_data.model_dump())
-        if data_store.s2_settings_data:
-            combined_data.update(data_store.s2_settings_data.model_dump())
-        if data_store.s3_queries_data:
-            combined_data.update(data_store.s3_queries_data.model_dump())
-        if data_store.s4_results_data:
-            combined_data.update(data_store.s4_results_data.model_dump())
-        if data_store.s5_saved_data:
-            combined_data.update(data_store.s5_saved_data.model_dump())
+    Args:
+        sheet_id: Google Sheet ID
+        data: Dictionary of data to write
+        sheet_name: Sheet name within the Google Sheet
+
+    Returns:
+        Tuple of (success, timestamp_uid)
+    """
+    try:
+        worksheet = get_cached_worksheet(sheet_id, sheet_name)
+        existing_df = get_as_dataframe(worksheet).dropna(how="all")
 
         # Add timestamp UID
         timestamp_uid = datetime.now().isoformat()
-        combined_data["timestamp_uid"] = timestamp_uid
+        data["timestamp_uid"] = timestamp_uid
 
         # Convert to DataFrame and append to existing data
-        new_row = pd.DataFrame([combined_data])
+        new_row = pd.DataFrame([data])
         new_df = pd.concat([existing_df, new_row], ignore_index=True)
 
         # Write back to the sheet
@@ -99,6 +111,7 @@ def read_all_entries(sheet_id: str, sheet_name: str = "data") -> list[dict]:
         worksheet = gc.open_by_key(sheet_id).worksheet(sheet_name)
         df = get_as_dataframe(worksheet).dropna(how="all")
         if not df.empty:
+            # Fill NA with empty strings to avoid serialization issues
             records = df.fillna("").to_dict(orient="records")
             return records
         else:
@@ -106,3 +119,88 @@ def read_all_entries(sheet_id: str, sheet_name: str = "data") -> list[dict]:
     except Exception as error:
         logger.error(f"Error reading all data: {error}")
         return []
+
+
+def write_search_result(sheet_id: str, sheet_name: str, result_data: dict) -> tuple[bool, str | None]:
+    """Write a single search result with its associated metadata to the sheet."""
+    try:
+        worksheet = get_cached_worksheet(sheet_id, sheet_name)
+        existing_df = get_as_dataframe(worksheet).dropna(how="all")
+
+        # Add timestamp
+        timestamp_uid = datetime.now().isoformat()
+        result_data["timestamp"] = timestamp_uid
+
+        # Convert to DataFrame and append
+        new_row = pd.DataFrame([result_data])
+        new_df = pd.concat([existing_df, new_row], ignore_index=True)
+
+        # Update the sheet
+        set_with_dataframe(worksheet, new_df)
+        format_worksheet(worksheet)
+        return True, timestamp_uid
+    except Exception as error:
+        logger.error(f"Error writing search result: {error}")
+        return False, None
+
+
+def write_settings(sheet_id: str, settings_data: dict) -> tuple[bool, str | None]:
+    """Write settings snapshot to Google Sheet."""
+    with logfire.span("write_settings"):
+        try:
+            logger.info("Starting settings write", extra={"sheet_id": sheet_id})
+            worksheet = get_cached_worksheet(sheet_id, "data")
+            logger.info("Got worksheet")
+
+            existing_df = get_as_dataframe(worksheet).dropna(how="all")
+            logger.info("Got existing data", extra={"rows": len(existing_df)})
+
+            # Add timestamp and type marker
+            timestamp = datetime.now().isoformat()
+            settings_data.update(
+                {
+                    "timestamp": timestamp,
+                    "type": "settings_snapshot",
+                }
+            )
+
+            # Convert to DataFrame and append
+            new_row = pd.DataFrame([settings_data])
+            new_df = pd.concat([existing_df, new_row], ignore_index=True)
+            logger.info("Prepared new data", extra={"new_rows": len(new_df) - len(existing_df)})
+
+            # Update sheet
+            set_with_dataframe(worksheet, new_df)
+            logger.info("Written to sheet")
+            format_worksheet(worksheet)
+            logger.info("Formatted worksheet")
+
+            return True, timestamp
+        except Exception as error:
+            logger.error(
+                "Error writing settings",
+                exc_info=True,
+                extra={
+                    "error": str(error),
+                    "sheet_id": sheet_id,
+                    "data_size": len(str(settings_data)),
+                },
+            )
+            return False, None
+
+
+def read_latest_settings(sheet_id: str) -> dict | None:
+    """Read most recent settings snapshot from Google Sheet."""
+    try:
+        worksheet = get_cached_worksheet(sheet_id, "data")
+        df = get_as_dataframe(worksheet).dropna(how="all")
+
+        if not df.empty:
+            # Get latest settings snapshot
+            settings_df = df[df["type"] == "settings_snapshot"]
+            if not settings_df.empty:
+                return settings_df.iloc[-1].to_dict()
+        return None
+    except Exception as error:
+        logger.error(f"Error reading settings: {error}")
+        return None

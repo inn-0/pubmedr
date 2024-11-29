@@ -8,7 +8,7 @@
 import pytest
 
 import pubmedr.data_store as data_store
-from pubmedr.data_models import S1datamodelSetup
+from pubmedr.data_models import S1Setup
 from pubmedr.gdrive import read_all_entries, read_last_entry, write_all_data
 
 SHEET_ID = "1iC_D0ggTRiHhr8EOl7Mi2HRYs7efzFZSRw6GqPUSC8s"
@@ -17,8 +17,8 @@ SHEET_NAME = "test_s1_setup"
 
 @pytest.fixture
 def test_setup_data():
-    """Test data matching S1datamodelSetup model fields."""
-    return S1datamodelSetup(
+    """Test data matching S1Setup model fields."""
+    return S1Setup(
         s1_gsheet_id=SHEET_ID,
         s1_researcher_background="Test researcher with biology background",
         s1_researcher_goal="Find papers about CRISPR applications",

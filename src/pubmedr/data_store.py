@@ -3,19 +3,19 @@
 from textual.widgets import Input
 
 from pubmedr.data_models import (
-    S1datamodelSetup,
-    S2datamodelSettings,
-    S3datamodelQueries,
-    S4datamodelResults,
-    S5datamodelSaved,
+    S1Setup,
+    S2Settings,
+    S2Query,
+    S4Results,
+    S5SavedResult,
 )
 
 # Initialize all data model instances to None
-s1_setup_data: S1datamodelSetup | None = None
-s2_settings_data: S2datamodelSettings | None = None
-s3_queries_data: S3datamodelQueries | None = None
-s4_results_data: S4datamodelResults | None = None
-s5_saved_data: S5datamodelSaved | None = None
+s1_setup_data: S1Setup | None = None
+s2_settings_data: S2Settings | None = None
+s2_queries_data: S2Query | None = None
+s4_results_data: S4Results | None = None
+s5_saved_data: S5SavedResult | None = None
 
 
 def refresh_widget_from_model(widget, data_model) -> None:

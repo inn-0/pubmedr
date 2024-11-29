@@ -1,0 +1,30 @@
+[server]
+# address = "0.0.0.0"
+headless = true
+enableWebsocketCompression = false
+runOnSave = true
+allowRunOnSave = true
+
+[runner]
+magicEnabled = false
+
+[client]
+# toolbarMode = "minimal"
+
+[logger]
+enableRich = true
+
+[global]
+suppressDeprecationWarnings = true
+developmentMode = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#007AB8"  # Roche blue
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#E6EEF3"
+textColor = "#1A1A1A"
+font = "sans serif"
+base = "light"

@@ -21,9 +21,7 @@ def load_cache() -> dict:
                 for key, value in cache["data_store_dump"].items():
                     if value is not None and key.endswith("_data"):
                         # Get the type annotation directly from data_store
-                        model_class = data_store.__annotations__[key].__args__[
-                            0
-                        ]  # Gets the non-None type from Optional
+                        model_class = data_store.__annotations__[key].__args__[0]  # Gets the non-None type from Optional
                         setattr(data_store, key, model_class.model_validate(value))
 
             return cache

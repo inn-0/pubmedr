@@ -7,7 +7,7 @@ from textual.containers import Vertical
 from textual.widgets import Header, MarkdownViewer, TabbedContent, TabPane
 
 import pubmedr.data_store as data_store
-from pubmedr.data_models import S1datamodelSetup
+from pubmedr.data_models import S1Setup
 from pubmedr.gdrive import read_last_entry
 from pubmedr.textual_components.s1_setup import S1screenSetup
 from pubmedr.textual_components.s2_settings import S2screenSettings
@@ -43,7 +43,7 @@ class PubMedR(App):
                     last_entry = read_last_entry(sheet_id=gsheet_id, sheet_name="data")
                     if last_entry:
                         # Store in data_store for components to access
-                        data_store.s1_setup_data = S1datamodelSetup(
+                        data_store.s1_setup_data = S1Setup(
                             s1_gsheet_id=gsheet_id,
                             s1_researcher_background=last_entry.get("s1_researcher_background", ""),
                             s1_researcher_goal=last_entry.get("s1_researcher_goal", ""),

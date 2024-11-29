@@ -1,32 +1,94 @@
+# **PubMedR - PubMed Researcher Assistant UI**
 
-# Live Demo
 
-https://pubmedr.replit.app
+---
 
-# Install & Run
+## **Live Demo**
+
+[PubMedR Live Demo](https://pubmedr.replit.app)
+
+
+---
+
+
+## **The 5 Stages of PubMedR**:
+   1. **SETUP**: The user specifies their role and goal, to make the AI suggestions adapted.
+   2. **SETTINGS**: Chat & dashboard UI for setting filters, to generate PubMed queries.
+   3. **QUERIES**: Mix, match, edit, & generate creative and powerful PubMed queries.
+   4. **RESULTS**: Can browse and select individual papers, with quick notes and AI summaries.
+   5. **SAVED**: User's selected papers are saved to Google Sheets for easy sharing.
+
+---
+
+
+## Simply install [UV](https://docs.astral.sh/uv/), clone using Git, type `make install`, then `make run`.
+
+
 ```bash
-uv add metapub pydantic pytest pytest-cov pytest-asyncio textual textual-dev textual[syntax] pandas google-api-python-client google-auth gspread gspread-dataframe gspread-formatting requests urllib3 logfire instructor openai
 
-uv run ./src/pubmedr/main.py
+.PHONY: install install-dev test run
+
+install:
+   uv sync
+   uv pip install -e .
+
+install-dev:
+   uv sync --all-extras
+   uv pip install -e .
+
+test:
+   uv run pytest --cov=. --cov-fail-under=70
+
+run:
+   uv run streamlit run ./src/pubmedr/streamlit_main.py
+
 ```
 
 ---
 
-My backround: Masters in Chemistry & Mathematics (2 internships at CERN), worked as a Mathematics & Philosophy Teacher, recent graduate from a Masters in Data Science, currently working as a Consulting Data Scientist via my own self-employed company.
+## **Why use PubMedR**:
+   - I took the initiative to interview multiple regular users of PubMed (Doctors, Pharmacists, Scientists). They revealed two main design challenges to solve:
+   - Finding relvent relevant specific information (true positives), with overlapping searches that are specific enough to narrow 1000s down to the best 30 papers to read.
+   - Confirming an idea is novel (open to research / publish on) by searching wide enough to check it isn't on PubMed. But can you be SURE? Are there Truly No results, or is that a __False Negative__?
+   - PubMedR solves both of these problems, giving very efficient queries, and making it easier to cast much wider search nets.
 
-I am currently working on a project for JTI in Geneva, designing LLM pipelines for their reserach scientists. So I have first hand experience of publishing my own scientific resrach papers, and of knowing how reserachers use Pubmed, and what could make that usage better.
+---
 
-I use a Design Thinking approach, starting with going to users and finding their pain points. So I interviewed a former classmate who currently works in Roche Basel, and a practicing doctor who uses Pubmed regularly.
+## **Convenient and Transparent**:
+   - I interviewed current Roche employees to understand the technical constraints of building real products in Roche. That made me choose to design the data storage centered on Google Sheets, to work in a secure but cloud-native collaborative style.
+ 
+![logfire picture](./assets/Logfire.jpg)
 
-The main design decisions I got from their feedback were:
-1. Use Google Drive for data serialisation, to Google Sheets not locally, becuase this is the expected best practice in Roche
-2. Users search pubmed primarily either to A. find out specific information (true positive), or to B. find no results and decide that their idea is novel and worth pursuing, for which it is very important to have sufficently broad searches (need to avoid false negative)
-3. Deploy in a format that is cross-platform compatible and lightweight. 'Textual' was chosen because it can be run locally, or also conveniently deployed to Replit (or Google Cloud Platform)
+   - Before scaling-up real products, you must quantify their performance & cost. For that I integrated "Logfire": 1. Logfire visualises script errors and successes live, things like 2. LLM inputs/outputs and 3. token counts, which can be 4. aggregated into real-time API-cost dashboards.
+
+---
+
+## **My Background**
+- Masters in Chemistry & Mathematics (including two internships at CERN).
+- Prior career as a Mathematics & Philosophy Teacher.
+- Recent graduate with a Masters in Data Science from a Business School.
+- Thesis: Data-Mining Venture Captial Pitchbooks using Multi-Modal LLMs.
+- Currently working as a Consulting Data Scientist via my self-employed company, designing LLM pipelines for research scientists at JTI, Geneva.
+
+## **Professional Experience**
+- Keenly interested in working on ambitious projects with top collaborators, with an eye towards full-stack / ML Engineering in technical teams.
+- First-hand experience in publishing my own scientific research papers, making GenAI tools to support researchers needs.
+- Strong User-Centered Design tendencies, feedback-driven approach focused on asking and finding solving key user pain points.
+
+---
 
 
-There are 5 stages in my app:
-1. SETUP: User specifies their role and goal
-2. SETTINGS: User interacts with the (chat) UI to specify their filters
-3. QUERIES: It uses those filters to generate pubmed queries (using the metapub package)
-4. RESULTS: Users can browse and select individual results to save and add notes to
-5. SAVED: Users can browse their saved results, either in the app, or in Google Sheets
+## Contents
+
+streamilt_main.py  —  The main UI layout
+streamlit_components.py  — Interactive visual elements
+streamlit.py — Interactive functionality & business logic
+data_models.py — Organising data to send to/from Streamlit ←→ LLMs
+gdrive.py — Google Workspace API methods
+ai_methods.py — Structured outputs using Instructor package
+metapub_methods.py — PubMed interface library
+config.py , constants.py , utils.py — Misc.
+
+## .env
+
+I've included a (of course anonymised) placeholder .env file, just to help demonstrate the syntax I use for locally loading my environment secrets (note: .env is listed in the .gitignore for you avoid leaking yours).

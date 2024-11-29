@@ -11,7 +11,7 @@ from textual.widgets import Button, Input, Label
 from textual.worker import Worker
 
 import pubmedr.data_store as data_store
-from pubmedr.data_models import S1datamodelSetup
+from pubmedr.data_models import S1Setup
 from pubmedr.gdrive import write_all_data
 from pubmedr.textual_components.textual_utils import notify_error, notify_operation_status, open_url_in_browser
 from pubmedr.utils import save_cache
@@ -96,7 +96,7 @@ class S1screenSetup(Widget):
         gsheet_input = self.query_one("#s1_gsheet_id", Input).value.strip()
         gsheet_id = extract_gsheet_id(gsheet_input)
 
-        setup_data = S1datamodelSetup(
+        setup_data = S1Setup(
             s1_gsheet_id=gsheet_id,
             s1_researcher_background=self.query_one("#s1_researcher_background", Input).value.strip(),
             s1_researcher_goal=self.query_one("#s1_researcher_goal", Input).value.strip(),

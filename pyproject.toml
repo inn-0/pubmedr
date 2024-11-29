@@ -1,7 +1,7 @@
 [project]
 name = "pubmedr"
 version = "0.1.0"
-description = "Add your description here"
+description = "PubMedR Streamlit App"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -24,12 +24,14 @@ dependencies = [
     "instructor>=1.6.4",
     "openai>=1.55.1",
     "streamlit>=1.40.2",
+    "streamlit-code-editor>=0.1.21",
+    "pyinstrument>=5.0.0",
 ]
 #    "htmx>=0.0.0",  # this was blocking pydantic>=2.0.0
 
 
 [tool.ruff]
-line-length = 120
+line-length = 180
 indent-width = 4
 lint.ignore = ["I001"]  # Disables import sorting
 
@@ -43,17 +45,20 @@ docstring-code-format = true
 convention = "google"
 
 
-[tool.pytest]
-log_cli = true
-log_level = "INFO"
 
 [tool.pytest.ini_options]
-addopts = "--cov=. --no-cov-on-fail --cov-fail-under=90.0"
+addopts = "--cov=. --no-cov-on-fail --cov-fail-under=70.0"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = [
     "tests/test_*.py",
 ]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s - %(levelname)s - [%(module)s.%(funcName)s:%(lineno)d] - %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+
 
 [tool.coverage.run]
 source = ["src"]

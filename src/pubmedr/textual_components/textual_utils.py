@@ -10,11 +10,11 @@ from textual.widgets import Button, Footer
 
 import pubmedr.data_store as data_store
 from pubmedr.data_models import (
-    S1datamodelSetup,
-    S2datamodelSettings,
-    S3datamodelQueries,
-    S4datamodelResults,
-    S5datamodelSaved,
+    S1Setup,
+    S2Query,
+    S2Settings,
+    S4Results,
+    S5SavedResult,
 )
 from pubmedr.utils import save_cache
 
@@ -92,11 +92,11 @@ def load_settings(app, entry: dict):
     """Recreate settings by updating data_store and UI components."""
 
     data_model_classes = {
-        "s1_setup_data": S1datamodelSetup,
-        "s2_settings_data": S2datamodelSettings,
-        "s3_queries_data": S3datamodelQueries,
-        "s4_results_data": S4datamodelResults,
-        "s5_saved_data": S5datamodelSaved,
+        "s1_setup_data": S1Setup,
+        "s2_settings_data": S2Settings,
+        "s2_queries_data": S2Query,
+        "s4_results_data": S4Results,
+        "s5_saved_data": S5SavedResult,
     }
 
     for model_name, model_class in data_model_classes.items():

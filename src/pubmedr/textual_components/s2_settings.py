@@ -17,10 +17,10 @@ from textual.widgets import (
 )
 
 import pubmedr.data_store as data_store
-from pubmedr.data_models import EnumDateRange, EnumGender, EnumSpecies, EnumTextAvailability
-from pubmedr.data_models import S2datamodelSettingsAdvanced as S2s
-from pubmedr.data_models import S2datamodelSettingsSimple as S2a
-from pubmedr.data_models import S2datamodelSettings
+from pubmedr.data_models import EnumDateRange, S2EnumGender, S2EnumSpecies, S2EnumTextAvailability, S2Settings
+from pubmedr.data_models import S2SettingsAdvanced as S2s
+from pubmedr.data_models import S2SettingsSimple as S2a
+
 
 # Helper function to get field descriptions for tooltips
 def get_field_description(model_class, field_name):
@@ -118,10 +118,10 @@ class S2screenSettings(Widget):
             )
         yield Label("Text Availability:")
         text_options = [
-            (EnumTextAvailability.ALL.value, "All"),
-            (EnumTextAvailability.ABSTRACT.value, "Abstracts"),
-            (EnumTextAvailability.FREE_FULL_TEXT.value, "Free Full Text"),
-            (EnumTextAvailability.FULL_TEXT.value, "Full Text"),
+            (S2EnumTextAvailability.ALL.value, "All"),
+            (S2EnumTextAvailability.ABSTRACT.value, "Abstracts"),
+            (S2EnumTextAvailability.FREE_FULL_TEXT.value, "Free Full Text"),
+            (S2EnumTextAvailability.FULL_TEXT.value, "Full Text"),
         ]
         yield Select(options=text_options, id="text_availability")
         yield Label("Exclusions:")
@@ -166,16 +166,16 @@ class S2screenSettings(Widget):
         )
         yield Label("Species:")
         species_options = [
-            (EnumSpecies.HUMAN.value, "Humans"),
-            (EnumSpecies.ANIMAL.value, "Other Animals"),
-            (EnumSpecies.BOTH.value, "Both"),
+            (S2EnumSpecies.HUMAN.value, "Humans"),
+            (S2EnumSpecies.ANIMAL.value, "Other Animals"),
+            (S2EnumSpecies.BOTH.value, "Both"),
         ]
         yield Select(options=species_options, id="species")
         yield Label("Gender:")
         gender_options = [
-            (EnumGender.MALE.value, "Male"),
-            (EnumGender.FEMALE.value, "Female"),
-            (EnumGender.BOTH.value, "Both"),
+            (S2EnumGender.MALE.value, "Male"),
+            (S2EnumGender.FEMALE.value, "Female"),
+            (S2EnumGender.BOTH.value, "Both"),
         ]
         yield Select(options=gender_options, id="gender")
         yield Label("MeSH Terms:")
@@ -263,4 +263,4 @@ class S2screenSettings(Widget):
         data_store.refresh_widget_from_model(self, data_store.s2_settings_data)
 
 
-print(S2datamodelSettings, S2s, S2a)
+print(S2Settings, S2s, S2a)
