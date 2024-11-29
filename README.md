@@ -7,7 +7,7 @@
 
 [PubMedR Live Demo](https://pubmedr.replit.app)
 
-![PubMedR Video](./assets/PubMedR.mp4)
+![PubMedR Video](https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.mp4)
 
 
 ---
@@ -59,7 +59,7 @@ run:
 ## **Convenient and Transparent**:
    - I interviewed current Roche employees to understand the technical constraints of building real products in Roche. That made me choose to design the data storage centered on Google Sheets, to work in a secure but cloud-native collaborative style.
  
-![logfire picture](./assets/Logfire.jpg)
+![logfire picture](https://github.com/inn-0/pubmedr/blob/main/assets/Logfire.jpg)
 
    - Before scaling-up real products, you must quantify their performance & cost. For that I integrated "Logfire": 1. Logfire visualises script errors and successes live, things like 2. LLM inputs/outputs and 3. token counts, which can be 4. aggregated into real-time API-cost dashboards.
 
@@ -82,14 +82,14 @@ run:
 
 ## Contents
 
-streamilt_main.py  —  The main UI layout
-streamlit_components.py  — Interactive visual elements
-streamlit.py — Interactive functionality & business logic
-data_models.py — Organising data to send to/from Streamlit ←→ LLMs
-gdrive.py — Google Workspace API methods
-ai_methods.py — Structured outputs using Instructor package
-metapub_methods.py — PubMed interface library
-config.py , constants.py , utils.py — Misc.
+- __streamilt_main.py__  —  The main UI layout
+- __streamlit_components.py__  — Interactive visual elements
+- __streamlit.py__ — Interactive functionality & business logic
+- __data_models.py__ — Organising data to send to/from Streamlit ←→ LLMs
+- __ai_methods.py__ — Structured outputs using Instructor package
+- __gdrive.py__ — Google Workspace API methods
+- __metapub_methods.py__ — PubMed interface library
+- __config.py__ , __constants.py__ , __utils.py__ — Misc.
 
 ## .env
 
