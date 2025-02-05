@@ -9,7 +9,7 @@
 
 [![PubMedR Video](https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg)](https://www.youtube.com/watch?v=SeimhEm61hQ)
 
-https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg 
+
 ---
 
 
