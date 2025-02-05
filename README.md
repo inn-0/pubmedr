@@ -7,9 +7,9 @@
 
 [PubMedR Live Demo](https://pubmedr.replit.app)
 
-[![PubMedR Video]([https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg](https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg))](https://www.youtube.com/watch?v=SeimhEm61hQ)
+[![PubMedR Video](https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg)](https://www.youtube.com/watch?v=SeimhEm61hQ)
 
-
+https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg 
 ---
 
 
