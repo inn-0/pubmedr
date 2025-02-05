@@ -5,7 +5,7 @@
 
 ## **Live Demo**
 
-[PubMedR Live Demo](https://pubmedr.replit.app)
+[PubMedR Live Website](https://pubmedr.replit.app)
 
 [![PubMedR Video](https://github.com/inn-0/pubmedr/blob/main/assets/PubMedR.jpg)](https://www.youtube.com/watch?v=SeimhEm61hQ)
 
